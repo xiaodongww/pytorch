@@ -14,3 +14,12 @@ def distanceMatrix(mtx1, mtx2):
     mmtx2 = torch.stack([mtx2]*m).transpose(0, 1)
     dist = torch.sum((mmtx1 - mmtx2)**2, 2).squeeze()
     return dist
+
+def replace(x, value):
+    """
+    Funtion: replace 0 with a specific value and set non zero elemets to zero 
+    x is a matrix with elemetn 0 and non-zero element
+    output[i,j] = value if x[i,j] equals to 0
+    output[i,j] = 0 if x[i,j] is not equal to 0
+    """
+    output = (x == 0).float().mul(value)
