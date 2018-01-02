@@ -47,3 +47,7 @@ def replace(x, value):
     output[i,j] = 0 if x[i,j] is not equal to 0
     """
     output = (x == 0).float().mul(value)
+    
+    
+def topk(lista):
+    return sorted(range(len(lista)), key=lambda i: lista[i])[-2:]
