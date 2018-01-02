@@ -49,5 +49,5 @@ def replace(x, value):
     output = (x == 0).float().mul(value)
     
     
-def topk(lista):
-    return sorted(range(len(lista)), key=lambda i: lista[i])[-2:]
+def topk(lista, k):
+    return sorted(range(len(lista)), key=lambda i: lista[i])[-k:]
