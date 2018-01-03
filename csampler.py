@@ -12,29 +12,35 @@ class categoryRandomSampler(Sampler):
         self.batch_size = batch_size
         self.num_samples = len(targets)
         self.numBatchCategory = numBatchCategory
-        num_categories = max(targets) + 1
-        self.categoy_idxs = {}
+        self.num_categories = max(targets) + 1
+        self.category_idxs = {}
+        self.categorys = list(range(self.num_categories))
 
-        for i in range(num_categories):
-            self.categoy_idxs[i] = []
+        for i in range(self.num_categories):
+            self.category_idxs[i] = []
 
         for i in range(self.num_samples):
-            self.categoy_idxs[targets[i]].append(i)
+            self.category_idxs[targets[i]].append(i)
        
 
     def __iter__(self):
         num_batches = self.num_samples//self.batch_size
         selected = []
         for i in range(num_batches):
-            categories_selcted = np.random.randint(100, size=self.numBatchCategory)
-            samplePool = []
+            batch = []
+            random.shuffle(self.categorys)
+            categories_selcted = self.categorys[:self.numBatchCategory]
+            # categories_selcted = np.random.randint(self.num_categories, size=self.numBatchCategory)
+            
             for j in categories_selcted:
-                samplePool.extend(self.categoy_idxs[j])
-            random.shuffle(samplePool)
-            batch = samplePool[:self.batch_size]
+                random.shuffle(self.category_idxs[j])
+                batch.extend(self.category_idxs[j][:int(self.batch_size//self.numBatchCategory)])
+
+            random.shuffle(batch)
             selected.extend(batch)
 
         return iter(torch.LongTensor(selected))
 
     def __len__(self):
         return self.num_samples
+        
