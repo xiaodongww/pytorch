@@ -11,7 +11,7 @@ import torchvision.transforms as transforms
 import torch.utils.data as data
 from PIL import Image
 import json
-
+import cv2
 
 defaullt_transform = transforms.Compose([transforms.ToTensor()])  
 def default_loader(path, resize,transform): 
@@ -19,6 +19,11 @@ def default_loader(path, resize,transform):
     img = img.resize((resize,resize))
     return transform(img)
 
+# opencv use BGR mode, and it is faster than pil  (about 2.1s vs 2.6s for 100 images)
+def default_loader_cv(path, resize, transform):
+    img = cv2.imread(path)
+    img = cv2.resize(img, (resize, resize))
+    return transform(img)
 
 class DIY_DATASET(data.Dataset):
     def __init__(self, root, train='train', transform=default_transform, Additional=False,resize=256):
